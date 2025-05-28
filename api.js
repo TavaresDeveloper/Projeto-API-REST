@@ -79,6 +79,42 @@ const port = 3000;
             
 });
 
+api.put('/atendimentoUpdate/:atendimentoID', async(req, res) => {
+      const{atendimentoID} = req.params;
+      const{atendimentoStatus} = req.body;
+
+      try{
+
+        const connection = await mysql2.createConnection(dbConfig);
+
+        const[resultado] = await connection.execute(`update atendimento set
+          atendimentoStatus = ? where atendimentoID = ?`, [atendimentoStatus, atendimentoID]);
+
+          await connection.end();
+
+          if((!resultado.affectedRows) === 0){
+
+              res.status(404).json({message: "Sessão de atendimento não encontrada"});
+
+          }
+
+          res.status(200).json({message: "Sessão de atendimento atualizada."});
+
+
+      }catch(error){
+
+          console.error("Falha ao processar requisição", error.message);
+          res.status(500).json({message: "Falha ao conectar com o banco de dados"});
+          
+
+
+      }
+
+
+
+
+
+});
 
 
  api.post('/clientesNovos', async (req, res) =>{
