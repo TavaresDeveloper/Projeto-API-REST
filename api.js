@@ -105,8 +105,34 @@ api.put('/atendimentoUpdate/:atendimentoID', async(req, res) => {
 
           console.error("Falha ao processar requisição", error.message);
           res.status(500).json({message: "Falha ao conectar com o banco de dados"});
-          
 
+
+
+      }
+
+
+
+
+
+});
+
+api.post('/atendimentoRecente', async(req, res)=> {
+      const{atendimentoStatus, funcionarioID, clienteID,} = req.body;
+
+      try{
+          const connection = await mysql2.createConnection(dbConfig);
+          
+          const[rows] = await connection.execute(`insert into atendimento(funcionarioID,
+            clienteID, atendimentoStatus) values(?, ?, ?)`, [funcionarioID, clienteID, atendimentoStatus]); 
+              
+            await connection.end();
+            
+        res.status(200).json({message: "Novo atendimento realizado com sucesso"});
+
+      }catch(error){
+
+        console.error("Falha ao processar requisição!", error.message);
+        res.status(500).json({message: "Falha ao conectar com o banco de dados!"});
 
       }
 
