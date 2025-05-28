@@ -126,7 +126,7 @@ api.post('/atendimentoRecente', async(req, res)=> {
             clienteID, atendimentoStatus) values(?, ?, ?)`, [funcionarioID, clienteID, atendimentoStatus]); 
               
             await connection.end();
-            
+
         res.status(200).json({message: "Novo atendimento realizado com sucesso"});
 
       }catch(error){
@@ -137,8 +137,35 @@ api.post('/atendimentoRecente', async(req, res)=> {
       }
 
 
+});
+
+api.delete('/atendimentoCancelado', async(req, res) =>{
+
+  const{atendimentoID} = req.body;
+    
+  try{
+     const connection = await mysql2.createConnection(dbConfig);
+
+     const[resultado] = await connection.execute(`delete from atendimento where 
+      atendimentoID = ?`, [atendimentoID]);
+      await connection.end();
+
+     if((!atendimentoID.affectedRows) === 0){
+
+         res.status(404).json({message: "Sessão não encontrada!"});
+
+     }
+
+    res.status(200).json({message: "Sessão cancelada com sucesso!"});
+
+  }catch(error){
+          
+      console.error("Falha ao processar requisição!", error.message);
+      res.status(500).json({message: "Falha ao conectar com banco de dados!"});
+   
 
 
+  }
 
 });
 
