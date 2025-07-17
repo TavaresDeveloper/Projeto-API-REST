@@ -12,7 +12,7 @@ const port = 3000;
       
         host: 'localhost',
         user: 'root',
-        password: '78900',
+        password: 'Moder23@@',
         database: 'empresa',
 
     };
